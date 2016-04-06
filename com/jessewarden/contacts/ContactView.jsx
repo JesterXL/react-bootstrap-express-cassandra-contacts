@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import ContactsModel from './ContactsModel';
 import classNames from 'classnames';
 import EventBus from './EventBus';
+import ImageView from './contactClasses/ImageView';
+import PhoneForm from './contactClasses/PhoneForm';
 
 class ContactView extends React.Component
 {
@@ -52,14 +54,9 @@ class ContactView extends React.Component
 		      'btn-default': false
 		    });
 
-
-
 			var contact = ContactsModel.instance.getContactByID(this.state.contactID);
 			// console.log("contact found:", contact);
-			var imageStyles = {
-				width: '4em',
-				height: '4em'
-			};
+			
 			contact.homeNumber = this.formatPhone(contact.homeNumber);
 
 			var margins = {
@@ -70,18 +67,7 @@ class ContactView extends React.Component
 				<div className="row" style={margins}>
 					<div className="col-xs-1"></div>
 					<div className="col-xs-10">
-						<div className="media">
-							<div className="media-left">
-								<a href="#">
-									<img className="media-object img-circle" src="" alt=""
-										style={imageStyles}></img>
-								</a>
-							</div>
-							<div className="media-body">
-								<h4 className="media-heading">{contact.firstName} {contact.lastName}</h4>
-								<p>{contact.company}</p>
-							</div>
-						</div>
+						<ImageView contact={contact}></ImageView>
 					</div>
 					<div className="col-xs-1"></div>
 					<div className="col-xs-12">
@@ -89,22 +75,7 @@ class ContactView extends React.Component
 					</div>
 					<div className="col-xs-1"></div>
 					<div className="col-xs-10">
-						<form className="form-inline">
-							<div className="form-group">
-							    <label for="phoneNumber">home</label>
-							    <div className="input-group">
-							      <input type="tel" className="form-control" 
-									id="phoneNumber" 
-									placeholder="home number"
-									disabled
-									defaultValue={contact.homeNumber}></input>
-							      <div className="input-group-addon glyphicon glyphicon-earphone"></div>
-							    </div>
-							</div>
-							<div className="input-group">
-								<button type="button" className={btnClass}>Test</button>
-							</div>
-						</form>
+						<PhoneForm contact={contact}></PhoneForm>
 					</div>
 					<div className="col-xs-1"></div>
 				</div>
