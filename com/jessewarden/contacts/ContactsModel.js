@@ -1,5 +1,8 @@
 import Rx from 'Rx';
 import GetContactsService from './GetContactsService';
+import _ from "lodash";
+
+console.log("_:", _);
 
 class ContactsModel
 {
@@ -51,6 +54,16 @@ class ContactsModel
 				});
 			});
 		}
+	}
+
+	getContactByID(id)
+	{
+		console.log("ContactsModel::getContactByID, id:", id);
+		return _.find(this._contacts, (item)=>
+		{
+			console.log("item.id: " + item.id + ", id: " + id);
+			return String(item.id) === String(id);
+		});
 	}
 
 	static get instance()
