@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import EventBus from './EventBus';
 import ImageView from './contactClasses/ImageView';
 import PhoneForm from './contactClasses/PhoneForm';
+import EditImageView from './contactClasses/EditImageView';
 
 class ContactView extends React.Component
 {
@@ -12,9 +13,12 @@ class ContactView extends React.Component
 	{
 		super(props);
 		this.state = {
+			mode: 'view' // state machine: view|edit|new
+		};
+		this.margins = {
+			marginTop: "1em"
 		};
 	}
-
 
 	componentDidMount()
 	{
@@ -24,19 +28,13 @@ class ContactView extends React.Component
 		.subscribe((event)=>
 		{
 			console.log("ContactView::componentDidMount, subscribe:", event);
+			switch(event.type)
+			{
+				case 'edit': this.setState({mode: 'edit'}); break;
+				case 'cancelEdit': this.setState({mode: 'view'}); break;
+				case 'completeEdit': this.setState({mode: 'view'}); break;
+			}
 		});
-	}
-
-	// found here http://jsfiddle.net/kaleb/Dm4Jv/
-	formatPhone(obj)
-	{
-		var numbers = obj.replace(/\D/g, ''),
-		char = {0:'(',3:') ',6:' - '};
-		obj = '';
-		for (var i = 0; i < numbers.length; i++) {
-			obj += (char[i]||'') + numbers[i];
-		}
-		return obj;
 	}
 
 	render()
@@ -49,38 +47,60 @@ class ContactView extends React.Component
 		}
 		else
 		{
-			var btnClass = classNames({
-		      'btn-primary': true,
-		      'btn-default': false
-		    });
-
-			var contact = ContactsModel.instance.getContactByID(this.state.contactID);
-			// console.log("contact found:", contact);
-			
-			contact.homeNumber = this.formatPhone(contact.homeNumber);
-
-			var margins = {
-				marginTop: "1em"
-			};
-
-			return (
-				<div className="row" style={margins}>
-					<div className="col-xs-1"></div>
-					<div className="col-xs-10">
-						<ImageView contact={contact}></ImageView>
-					</div>
-					<div className="col-xs-1"></div>
-					<div className="col-xs-12">
-						<p>&nbsp;</p>
-					</div>
-					<div className="col-xs-1"></div>
-					<div className="col-xs-10">
-						<PhoneForm contact={contact}></PhoneForm>
-					</div>
-					<div className="col-xs-1"></div>
-				</div>
-			);
+			switch(this.state.mode)
+			{
+				case 'view': return this.lessQQMoarPewPew();
+				case 'edit': return this.editView();
+				case 'new': return this.newView();
+			}
 		}
+	}
+
+	lessQQMoarPewPew()
+	{
+		var btnClass = classNames({
+	      'btn-primary': true,
+	      'btn-default': false
+	    });
+
+		var contact = ContactsModel.instance.getContactByID(this.state.contactID);
+		// console.log("contact found:", contact);
+
+		return (
+			<div className="row" style={this.margins}>
+				<div className="col-xs-1"></div>
+				<div className="col-xs-10">
+					<ImageView contact={contact}></ImageView>
+				</div>
+				<div className="col-xs-1"></div>
+				<div className="col-xs-12">
+					<p>&nbsp;</p>
+				</div>
+				<div className="col-xs-1"></div>
+				<div className="col-xs-10">
+					<PhoneForm contact={contact}></PhoneForm>
+				</div>
+				<div className="col-xs-1"></div>
+			</div>
+		);
+	}
+
+	editView()
+	{
+		var contact = ContactsModel.instance.getContactByID(this.state.contactID);
+		return (
+			<div className="row" style={this.margins}>
+				<div className="col-xs-1"></div>
+				<div className="col-xs-10">
+					<EditImageView contact={contact}></EditImageView>
+				</div>
+			</div>
+		);
+	}
+
+	newView()
+	{
+		return (<div>New</div>);
 	}
 }
 

@@ -3,6 +3,18 @@ import ReactDOM from 'react-dom';
 
 class PhoneForm extends React.Component
 {
+	// found here http://jsfiddle.net/kaleb/Dm4Jv/
+	formatPhone(obj)
+	{
+		var numbers = obj.replace(/\D/g, ''),
+		char = {0:'(',3:') ',6:' - '};
+		obj = '';
+		for (var i = 0; i < numbers.length; i++) {
+			obj += (char[i]||'') + numbers[i];
+		}
+		return obj;
+	}
+	
 	render()
 	{
 		var contact = this.props.contact;
@@ -10,6 +22,8 @@ class PhoneForm extends React.Component
 		{
 			return(<div>No contact.</div>);
 		}
+
+		contact.homeNumber = this.formatPhone(contact.homeNumber);
 
 		return (
 			<form className="form-inline">
