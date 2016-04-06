@@ -2,8 +2,6 @@ import Rx from 'Rx';
 import GetContactsService from './GetContactsService';
 import _ from "lodash";
 
-console.log("_:", _);
-
 class ContactsModel
 {
 

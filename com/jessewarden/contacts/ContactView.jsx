@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ContactsModel from './ContactsModel';
+import classNames from 'classnames';
+import EventBus from './EventBus';
 
 class ContactView extends React.Component
 {
@@ -8,14 +10,19 @@ class ContactView extends React.Component
 	{
 		super(props);
 		this.state = {
-			editMode: false
 		};
 	}
+
 
 	componentDidMount()
 	{
 		var contactID = this.props.params.id;
 		this.setState({contactID: contactID});
+		EventBus.pubsub
+		.subscribe((event)=>
+		{
+			console.log("ContactView::componentDidMount, subscribe:", event);
+		});
 	}
 
 	// found here http://jsfiddle.net/kaleb/Dm4Jv/
@@ -40,8 +47,15 @@ class ContactView extends React.Component
 		}
 		else
 		{
+			var btnClass = classNames({
+		      'btn-primary': true,
+		      'btn-default': false
+		    });
+
+
+
 			var contact = ContactsModel.instance.getContactByID(this.state.contactID);
-			console.log("contact found:", contact);
+			// console.log("contact found:", contact);
 			var imageStyles = {
 				width: '4em',
 				height: '4em'
@@ -75,7 +89,7 @@ class ContactView extends React.Component
 					</div>
 					<div className="col-xs-1"></div>
 					<div className="col-xs-10">
-						<form class="form-inline">
+						<form className="form-inline">
 							<div className="form-group">
 							    <label for="phoneNumber">home</label>
 							    <div className="input-group">
@@ -86,8 +100,10 @@ class ContactView extends React.Component
 									defaultValue={contact.homeNumber}></input>
 							      <div className="input-group-addon glyphicon glyphicon-earphone"></div>
 							    </div>
-							  </div>
-
+							</div>
+							<div className="input-group">
+								<button type="button" className={btnClass}>Test</button>
+							</div>
 						</form>
 					</div>
 					<div className="col-xs-1"></div>

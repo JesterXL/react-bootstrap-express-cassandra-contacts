@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import {Router, Route, Link, hashHistory} from 'react-router';
 import ContactRoutes from './com/jessewarden/contacts/ContactRoutes';
 import ContactsModel from './com/jessewarden/contacts/ContactsModel';
+import EventBus from './com/jessewarden/contacts/EventBus';
 
 class StyleConstants
 {
@@ -42,7 +43,7 @@ class MainHeader extends React.Component
 					</div>
 					<div className="row">
 						<div className="col-xs-12">
-							<img class='img-responsive' 
+							<img className='img-responsive' 
 								src='ic_person_add_black_512dp_2x.png'
 								style={StyleConstants.addPersonIcon}></img>
 						</div>
@@ -56,17 +57,64 @@ class MainHeader extends React.Component
 
 class ViewingContactHeader extends React.Component
 {
+	constructor(props)
+	{
+		super(props);
+		this.state = {
+			editMode: false
+		};
+	}
+
+	onEdit()
+	{
+		this.setState({
+			editMode: true
+		});
+		EventBus.pubsub.onNext({type: 'edit'});
+	}
+
+	onCancelEdit()
+	{
+		this.setState({
+			editMode: false
+		});
+		EventBus.pubsub.onNext({type: 'cancelEdit'});
+	}
+
+	onCompleteEdit()
+	{
+		this.setState({
+			editMode: false
+		});
+		EventBus.pubsub.onNext({type: 'completeEdit'});
+	}
+
 	render()
 	{
-		return(
-			<header className="row" style={StyleConstants.navBar}>
-				<div className="col-xs-1"></div>
-				<div className="col-xs-3"><h4><Link to='/'>&lt;Contacts</Link></h4></div>
-				<div className="col-xs-5"></div>
-				<div className="col-xs-2"><h4><a>Edit</a></h4></div>
-				<div className="col-xs-1"></div>
-			</header>
-		)
+		if(this.state.editMode === false)
+		{
+			return(
+				<header className="row" style={StyleConstants.navBar}>
+					<div className="col-xs-1"></div>
+					<div className="col-xs-3"><h4><Link to='/'>&lt;Contacts</Link></h4></div>
+					<div className="col-xs-5"></div>
+					<div className="col-xs-2"><h4><a onClick={this.onEdit.bind(this)}>Edit</a></h4></div>
+					<div className="col-xs-1"></div>
+				</header>
+			);
+		}
+		else
+		{
+			return(
+				<header className="row" style={StyleConstants.navBar}>
+					<div className="col-xs-1"></div>
+					<div className="col-xs-3"><h4><a onClick={this.onCancelEdit.bind(this)}>Cancel</a></h4></div>
+					<div className="col-xs-5"></div>
+					<div className="col-xs-2"><h4><a onClick={this.onCompleteEdit.bind(this)}>Done</a></h4></div>
+					<div className="col-xs-1"></div>
+				</header>
+			);
+		}
 	}
 }
 
