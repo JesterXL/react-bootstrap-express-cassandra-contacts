@@ -7,8 +7,11 @@ class ContactView extends React.Component
 	constructor(props)
 	{
 		super(props);
-		this.state = {};
+		this.state = {
+			editMode: false
+		};
 	}
+
 	componentDidMount()
 	{
 		var contactID = this.props.params.id;
@@ -44,13 +47,19 @@ class ContactView extends React.Component
 				height: '4em'
 			};
 			contact.homeNumber = this.formatPhone(contact.homeNumber);
+
+			var margins = {
+				marginTop: "1em"
+			};
+
 			return (
-				<div className="row">
-					<div className="col-xs-12">
+				<div className="row" style={margins}>
+					<div className="col-xs-1"></div>
+					<div className="col-xs-10">
 						<div className="media">
 							<div className="media-left">
 								<a href="#">
-									<img className="media-object" src="" alt=""
+									<img className="media-object img-circle" src="" alt=""
 										style={imageStyles}></img>
 								</a>
 							</div>
@@ -60,20 +69,28 @@ class ContactView extends React.Component
 							</div>
 						</div>
 					</div>
+					<div className="col-xs-1"></div>
 					<div className="col-xs-12">
 						<p>&nbsp;</p>
 					</div>
-					<div className="col-xs-12">
-						<form>
+					<div className="col-xs-1"></div>
+					<div className="col-xs-10">
+						<form class="form-inline">
 							<div className="form-group">
-								<label for="phoneNumber">home</label>
-								<input type="tel" className="form-control" 
-								id="phoneNumber" 
-								placeholder="home number"
-								defaultValue={contact.homeNumber}></input>
-							</div>
+							    <label for="phoneNumber">home</label>
+							    <div className="input-group">
+							      <input type="tel" className="form-control" 
+									id="phoneNumber" 
+									placeholder="home number"
+									disabled
+									defaultValue={contact.homeNumber}></input>
+							      <div className="input-group-addon glyphicon glyphicon-earphone"></div>
+							    </div>
+							  </div>
+
 						</form>
 					</div>
+					<div className="col-xs-1"></div>
 				</div>
 			);
 		}

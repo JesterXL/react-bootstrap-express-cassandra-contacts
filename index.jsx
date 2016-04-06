@@ -6,18 +6,49 @@ import {Router, Route, Link, hashHistory} from 'react-router';
 import ContactRoutes from './com/jessewarden/contacts/ContactRoutes';
 import ContactsModel from './com/jessewarden/contacts/ContactsModel';
 
+class StyleConstants
+{
+	static get navBar()
+	{
+		return {
+			height: '4em',
+			borderBottom: 'gray',
+			borderBottomStyle: 'solid',
+			borderBottomWidth: 'thin'
+		};
+	}
 
+	static get addPersonIcon()
+	{
+		return {
+			width: '2em',
+			height: '2em'
+		};
+	}
+}
 
 class MainHeader extends React.Component
 {
 	render()
 	{
 		return (
-			<header className="row">
+			<header className="row" style={StyleConstants.navBar}>
 				<div className="col-xs-4"></div>
-				<div className="col-xs-4"><h1>Contacts</h1></div>
-				<div className="col-xs-3"></div>
-				<div className="col-xs-1">oc</div>
+				<div className="col-xs-4"><h3>Contacts</h3></div>
+				<div className="col-xs-2"></div>
+				<div className="col-xs-2">
+					<div className="row">
+						<div className="col-xs-12">&nbsp;</div>
+					</div>
+					<div className="row">
+						<div className="col-xs-12">
+							<img class='img-responsive' 
+								src='ic_person_add_black_512dp_2x.png'
+								style={StyleConstants.addPersonIcon}></img>
+						</div>
+					</div>
+					
+				</div>
 			</header>
 		)
 	}
@@ -28,10 +59,12 @@ class ViewingContactHeader extends React.Component
 	render()
 	{
 		return(
-			<header className="row">
-				<div className="col-xs-4"><Link to='/'>&lt; Contacts</Link></div>
-				<div className="col-xs-6"></div>
-				<div className="col-xs-2"><a>Edit</a></div>
+			<header className="row" style={StyleConstants.navBar}>
+				<div className="col-xs-1"></div>
+				<div className="col-xs-3"><h4><Link to='/'>&lt;Contacts</Link></h4></div>
+				<div className="col-xs-5"></div>
+				<div className="col-xs-2"><h4><a>Edit</a></h4></div>
+				<div className="col-xs-1"></div>
 			</header>
 		)
 	}
@@ -72,18 +105,13 @@ export class App extends React.Component
 		}
 		return (
 			<div className="container-fluid">
-				<header className="row">
-					<Router history={hashHistory}>
-						<Route path="/" component={MainHeader}></Route>
-						<Route path="/view/:id" component={ViewingContactHeader}></Route>
-					</Router>
-				</header>
+				<Router history={hashHistory}>
+					<Route path="/" component={MainHeader}></Route>
+					<Route path="/view/:id" component={ViewingContactHeader}></Route>
+				</Router>
 				<section className="row">
 					<ContactRoutes/>
 				</section>
-				<footer>
-					Basic Footer
-				</footer>
 			</div>
 		);
 	}
