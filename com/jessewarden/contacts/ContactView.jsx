@@ -32,13 +32,16 @@ class ContactView extends React.Component
 			{
 				case 'edit': this.setState({mode: 'edit'}); break;
 				case 'cancelEdit': this.setState({mode: 'view'}); break;
-				case 'completeEdit': this.setState({mode: 'view'}); break;
+				case 'contactSaved':
+					// console.log("contactSaved, switching to view mode.");
+					this.setState({mode: 'view'}); break;
 			}
 		});
 	}
 
 	render()
 	{
+		console.log("ContactView::render, mode:", this.state.mode);
 		if(typeof this.state.contactID === 'undefined')
 		{
 			return (

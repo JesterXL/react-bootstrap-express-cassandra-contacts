@@ -1,5 +1,6 @@
 import Rx from 'Rx';
 import GetContactsService from './GetContactsService';
+import SaveContactService from './SaveContactService';
 import _ from "lodash";
 
 class ContactsModel
@@ -61,6 +62,29 @@ class ContactsModel
 		{
 			console.log("item.id: " + item.id + ", id: " + id);
 			return String(item.id) === String(id);
+		});
+	}
+
+	saveContact(contact)
+	{
+		console.log("ContactsModel::saveContact...");
+		var me = this;
+		return new Promise(function(success, failure)
+		{
+			new SaveContactService().saveContact(contact)
+			.then(function(contact)
+			{
+				var index = _.findIndex(me._contacts, (item)=>
+				{
+					return String(item.id) === String(contact.id);
+				});
+				me._contacts.splice(index, 1, contact);
+				success(contact);
+			})
+			.catch(function(error)
+			{
+				failure(error);
+			});
 		});
 	}
 

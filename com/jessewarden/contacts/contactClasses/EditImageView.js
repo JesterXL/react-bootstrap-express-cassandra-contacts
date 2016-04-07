@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
+import EventBus from '../EventBus';
 
 class EditImageView extends React.Component
 {
@@ -7,8 +9,21 @@ class EditImageView extends React.Component
 	{
 		super(props);
 		this.state = {
-			contact: props.contact
+			contact: _.cloneDeep(props.contact),
+			dirty: false
 		};
+	}
+
+	componentDidMount()
+	{
+		var me = this;
+		EventBus.pubsub
+		.where(event => event.type === 'completeEdit')
+		.subscribe((event)=>
+		{
+			console.log("EditImageView::componentDidMount, saveContact event received, dispatching saveContact");
+			EventBus.pubsub.onNext({type: 'saveContact', contact: me.state.contact});
+		});
 	}
 
 	render()
@@ -64,14 +79,16 @@ class EditImageView extends React.Component
 	{
 		var contact = this.state.contact;
 		contact.firstName = event.target.value;
-		this.setState({contact: contact});
+		this.setState({contact: contact, dirty: true});
+		EventBus.pubsub.onNext({type: 'editDirty'});
 	}
 
 	onSetLastName(event)
 	{
 		var contact = this.state.contact;
 		contact.lastName = event.target.value;
-		this.setState({contact: contact});
+		this.setState({contact: contact, dirty: true});
+		EventBus.pubsub.onNext({type: 'editDirty'});
 	}
 
 	onSetCompany(event)
@@ -83,14 +100,16 @@ class EditImageView extends React.Component
 			console.log("%cW"+"%ci"+"%cn"+"%cn"+"%ci"+"%cn"+"%cg"+"%c!"+"%c!"+"%c1"+"%c1"+"%cone"+"%cone",
 						"color:red","color:orange","color:yellow","color:green","color:purple","color:blue","color:red","color:orange","color:yellow","color:green","color:purple","color:blue","color:red");
 		}
-		this.setState({contact: contact});
+		this.setState({contact: contact, dirty: true});
+		EventBus.pubsub.onNext({type: 'editDirty'});
 	}
 
 	onSetHomeNumber(event)
 	{
 		var contact = this.state.contact;
 		contact.homeNumber = event.target.value;
-		this.setState({contact: contact});
+		this.setState({contact: contact, dirty: true});
+		EventBus.pubsub.onNext({type: 'editDirty'});
 	}
 }
 

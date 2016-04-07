@@ -6,6 +6,7 @@ import {Router, Route, Link, hashHistory} from 'react-router';
 import ContactRoutes from './com/jessewarden/contacts/ContactRoutes';
 import ContactsModel from './com/jessewarden/contacts/ContactsModel';
 import EventBus from './com/jessewarden/contacts/EventBus';
+import _ from 'lodash';
 
 class StyleConstants
 {
@@ -55,14 +56,61 @@ class MainHeader extends React.Component
 	}
 }
 
+class DoneButton extends React.Component
+{
+
+	render()
+	{
+		if(this.props.enabled)
+		{
+			return (
+				<h4><a onClick={this.props.onClick}>Done</a></h4>
+			);
+		}
+		else
+		{
+			var disabledStyles = 
+			{
+				color: '#666666'
+			};
+			return (
+				<h4 style={disabledStyles}>Done</h4>
+			);
+		}
+	}
+}
+
 class ViewingContactHeader extends React.Component
 {
 	constructor(props)
 	{
 		super(props);
 		this.state = {
-			editMode: false
+			editMode: false,
+			editDirty: false
 		};
+	}
+
+	componentDidMount()
+	{
+		var me = this;
+		EventBus.pubsub
+		.where(event => event.type === 'editDirty')
+		.subscribe((event)=>
+		{
+			// console.log("ViewingContactHeader::componentDidMount, editDirty event");
+			if(me.state.editDirty === false)
+			{
+				me.setState({editDirty: true});
+			}
+		});
+
+		EventBus.pubsub
+		.where(event => event.type === 'contactSaved')
+		.subscribe((event)=>
+		{
+			me.setState({editMode: false});
+		});
 	}
 
 	onEdit()
@@ -83,9 +131,7 @@ class ViewingContactHeader extends React.Component
 
 	onCompleteEdit()
 	{
-		this.setState({
-			editMode: false
-		});
+		console.log("ViewingContactHeader::onCompleteEdit");
 		EventBus.pubsub.onNext({type: 'completeEdit'});
 	}
 
@@ -105,12 +151,13 @@ class ViewingContactHeader extends React.Component
 		}
 		else
 		{
+			// console.log("this.state.editDirty:", this.state.editDirty);
 			return(
 				<header className="row" style={StyleConstants.navBar}>
 					<div className="col-xs-1"></div>
 					<div className="col-xs-3"><h4><a onClick={this.onCancelEdit.bind(this)}>Cancel</a></h4></div>
 					<div className="col-xs-5"></div>
-					<div className="col-xs-2"><h4><a onClick={this.onCompleteEdit.bind(this)}>Done</a></h4></div>
+					<div className="col-xs-2"><DoneButton enabled={this.state.editDirty} onClick={this.onCompleteEdit.bind(this)}>Done</DoneButton></div>
 					<div className="col-xs-1"></div>
 				</header>
 			);
@@ -136,6 +183,16 @@ export class App extends React.Component
 		.then(function(contacts)
 		{
 			me.setState({loading: false});
+		});
+		EventBus.pubsub
+		.where(event => event.type === 'saveContact')
+		.subscribe((event)=>
+		{
+			ContactsModel.instance.saveContact(event.contact)
+			.then(function(savedContact)
+			{
+				EventBus.pubsub.onNext({type: "contactSaved"});
+			});
 		});
 	}
 
