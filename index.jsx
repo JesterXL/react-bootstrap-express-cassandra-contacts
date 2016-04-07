@@ -37,7 +37,7 @@ export class App extends React.Component
 			ContactsModel.instance.saveContact(event.contact)
 			.then(function(savedContact)
 			{
-				EventBus.pubsub.onNext({type: "contactSaved"});
+				hashHistory.push('/view/' + savedContact.id);
 			});
 		});
 	}

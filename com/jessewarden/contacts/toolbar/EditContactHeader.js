@@ -28,13 +28,6 @@ class EditContactHeader extends React.Component
 				me.setState({editDirty: true});
 			}
 		});
-
-		EventBus.pubsub
-		.where(event => event.type === 'contactSaved')
-		.subscribe((event)=>
-		{
-			me.setState({editMode: false});
-		});
 	}
 
 	onCompleteEdit()
