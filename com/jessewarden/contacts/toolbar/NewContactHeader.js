@@ -5,7 +5,7 @@ import StyleConstants from '../StyleConstants';
 import {Router, Route, Link, hashHistory} from 'react-router';
 import DoneButton from './DoneButton';
 
-class EditContactHeader extends React.Component
+class NewContactHeader extends React.Component
 {
 	constructor(props)
 	{
@@ -32,12 +32,12 @@ class EditContactHeader extends React.Component
 
 	onCompleteEdit()
 	{
-		EventBus.pubsub.onNext({type: 'completeEdit'});
+		EventBus.pubsub.onNext({type: 'completeNew'});
 	}
 
 	render()
 	{
-		var cancelLink = '/view/' + this.props.params.id;
+		var cancelLink = '/';
 		console.log("cancelLink:", cancelLink);
 		return (
 			<header className="row" style={StyleConstants.navBar}>
@@ -51,4 +51,4 @@ class EditContactHeader extends React.Component
 	}
 }
 
-export default EditContactHeader
+export default NewContactHeader

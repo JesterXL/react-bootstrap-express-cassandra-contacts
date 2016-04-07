@@ -1,6 +1,7 @@
 import Rx from 'Rx';
 import GetContactsService from '../services/GetContactsService';
 import SaveContactService from '../services/SaveContactService';
+import CreateNewContact from '../services/CreateNewContact';
 import _ from "lodash";
 
 class ContactsModel
@@ -86,6 +87,47 @@ class ContactsModel
 				failure(error);
 			});
 		});
+	}
+
+	saveNewContact(contact)
+	{
+		console.log("ContactsModel::saveNewContact...");
+		var me = this;
+		return new Promise(function(success, failure)
+		{
+			new CreateNewContact().createNewContact(contact)
+			.then(function(contact)
+			{
+				var start = 0;
+				_.forEach(me._contacts, (item)=>
+				{
+					var id = item.id;
+					if(_.isString(id))
+					{
+						id = parseInt(id);
+					}
+					if(id > start)
+					{
+						start = id;
+					}
+				});
+				start++;
+				contact.id = start;
+				me._contacts.push(contact);
+				success(contact);
+			})
+			.catch(function(error)
+			{
+				failure(error);
+			});
+		});
+	}
+
+	getNewContact()
+	{
+		return {
+			firstName: '', lastName: '', company: '', homeNumber: ""
+		};
 	}
 
 	static get instance()

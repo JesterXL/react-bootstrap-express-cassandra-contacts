@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import StyleConstants from '../StyleConstants';
+import {Link} from 'react-router';
 
 class MainHeader extends React.Component
 {
@@ -17,9 +18,11 @@ class MainHeader extends React.Component
 					</div>
 					<div className="row">
 						<div className="col-xs-12">
-							<img className='img-responsive' 
-								src='ic_person_add_black_512dp_2x.png'
-								style={StyleConstants.addPersonIcon}></img>
+							<Link to='/new'>
+								<img className='img-responsive' 
+									src='ic_person_add_black_512dp_2x.png'
+									style={StyleConstants.addPersonIcon}></img>
+							</Link>
 						</div>
 					</div>
 					

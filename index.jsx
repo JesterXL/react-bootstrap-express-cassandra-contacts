@@ -3,13 +3,17 @@ require("./node_modules/bootstrap/dist/css/bootstrap-theme.min.css")
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Link, hashHistory} from 'react-router';
-import ContactRoutes from './com/jessewarden/contacts/ContactRoutes';
 import ContactsModel from './com/jessewarden/contacts/models/ContactsModel';
 import EventBus from './com/jessewarden/contacts/EventBus';
 import _ from 'lodash';
 import MainHeader from './com/jessewarden/contacts/toolbar/MainHeader';
 import ViewingContactHeader from './com/jessewarden/contacts/toolbar/ViewingContactHeader';
 import EditContactHeader from './com/jessewarden/contacts/toolbar/EditContactHeader';
+import NewContactHeader from './com/jessewarden/contacts/toolbar/NewContactHeader';
+import ContactList from './com/jessewarden/contacts/ContactList';
+import ContactView from './com/jessewarden/contacts/ContactView';
+import EditContactView from './com/jessewarden/contacts/EditContactView';
+import NewContactView from './com/jessewarden/contacts/NewContactView';
 
 export class App extends React.Component
 {
@@ -30,6 +34,7 @@ export class App extends React.Component
 		{
 			me.setState({loading: false});
 		});
+		
 		EventBus.pubsub
 		.where(event => event.type === 'saveContact')
 		.subscribe((event)=>
@@ -40,6 +45,18 @@ export class App extends React.Component
 				hashHistory.push('/view/' + savedContact.id);
 			});
 		});
+
+		EventBus.pubsub
+		.where(event => event.type === 'saveNewContact')
+		.subscribe((event)=>
+		{
+			ContactsModel.instance.saveNewContact(event.contact)
+			.then(function(savedContact)
+			{
+				hashHistory.push('/view/' + savedContact.id);
+			});
+		});
+
 	}
 
 	render()
@@ -60,9 +77,15 @@ export class App extends React.Component
 					<Route path="/" component={MainHeader}></Route>
 					<Route path="/view/:id" component={ViewingContactHeader}></Route>
 					<Route path="/edit/:id" component={EditContactHeader}></Route>
+					<Route path="/new" component={NewContactHeader}></Route>
 				</Router>
 				<section className="row">
-					<ContactRoutes/>
+					<Router history={hashHistory}>
+						<Route path="/" component={ContactList}></Route>
+						<Route path="/view/:id" component={ContactView}></Route>
+						<Route path="/edit/:id" component={EditContactView}></Route>
+						<Route path="/new" component={NewContactView}></Route>
+					</Router>
 				</section>
 			</div>
 		);
