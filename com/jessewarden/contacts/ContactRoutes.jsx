@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import {Router, Route, Link, hashHistory} from 'react-router';
 import ContactList from './ContactList';
 import ContactView from './ContactView';
-
-const ContactsHome = ()=> <div><h1>Contacts</h1></div>;
+import EditContactView from './EditContactView';
 
 class ContactRoutes extends React.Component
 {
@@ -15,6 +14,7 @@ class ContactRoutes extends React.Component
 			<Router history={hashHistory}>
 				<Route path="/" component={ContactList}></Route>
 				<Route path="/view/:id" component={ContactView}></Route>
+				<Route path="/edit/:id" component={EditContactView}></Route>
 			</Router>
 		);
 	}

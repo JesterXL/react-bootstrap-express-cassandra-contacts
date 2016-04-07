@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Button from 'react-bootstrap/lib/Button';
-import ContactsModel from './ContactsModel';
+import ContactsModel from './models/ContactsModel';
 import {Link, hashHistory} from 'react-router';
 
 class ContactList extends React.Component

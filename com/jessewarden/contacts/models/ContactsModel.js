@@ -1,6 +1,6 @@
 import Rx from 'Rx';
-import GetContactsService from './GetContactsService';
-import SaveContactService from './SaveContactService';
+import GetContactsService from '../services/GetContactsService';
+import SaveContactService from '../services/SaveContactService';
 import _ from "lodash";
 
 class ContactsModel
