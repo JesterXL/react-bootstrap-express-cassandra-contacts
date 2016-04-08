@@ -25,8 +25,11 @@
   },
   "homepage": "https://github.com/alicoding/react-webpack-babel#readme",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "bootstrap": "3.3.5",
+    "cassandra-driver": "^3.0.2",
     "classnames": "^2.2.3",
+    "express": "^4.13.4",
     "json-loader": "^0.5.4",
     "json5-loader": "^0.6.0",
     "jsx-loader": "^0.13.2",
