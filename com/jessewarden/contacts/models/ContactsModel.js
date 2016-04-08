@@ -51,6 +51,11 @@ class ContactsModel
 					console.log("Contacts found from GetContactsService, returning.");
 					me.contacts = contacts;
 					success(contacts);
+				})
+				.catch(function(error)
+				{
+					console.log("Contacts load error:", error);
+					failure(error);
 				});
 			});
 		}
@@ -95,24 +100,25 @@ class ContactsModel
 		var me = this;
 		return new Promise(function(success, failure)
 		{
+			var start = 0;
+			_.forEach(me._contacts, (item)=>
+			{
+				var id = item.id;
+				if(_.isString(id))
+				{
+					id = parseInt(id);
+				}
+				if(id > start)
+				{
+					start = id;
+				}
+			});
+			start++;
+			contact.id = start;
+			console.log("saveNewContact's id:", contact.id);
 			new CreateNewContact().createNewContact(contact)
 			.then(function(contact)
 			{
-				var start = 0;
-				_.forEach(me._contacts, (item)=>
-				{
-					var id = item.id;
-					if(_.isString(id))
-					{
-						id = parseInt(id);
-					}
-					if(id > start)
-					{
-						start = id;
-					}
-				});
-				start++;
-				contact.id = start;
 				me._contacts.push(contact);
 				success(contact);
 			})

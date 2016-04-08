@@ -6,6 +6,7 @@ class PhoneForm extends React.Component
 	// found here http://jsfiddle.net/kaleb/Dm4Jv/
 	formatPhone(obj)
 	{
+		console.log("formatPhone, obj:", obj);
 		var numbers = obj.replace(/\D/g, ''),
 		char = {0:'(',3:') ',6:' - '};
 		obj = '';

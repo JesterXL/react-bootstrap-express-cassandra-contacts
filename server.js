@@ -5,7 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cassandra = require('cassandra-driver');
 const _ = require('lodash');
+const cors = require('cors')
 
+app.use(cors());
 app.use(bodyParser.json());
 
 // app.use(express.static(__dirname + '/public'));
@@ -134,8 +136,8 @@ app.post('/api/createcontact', function(req, res)
 	.then((client)=>
 	{
 		var query = "INSERT INTO contacts (user_id, firstname, lastname, company, phone) VALUES (";
-		query += contact.userID + ", '" + contact.firstName + "', '" + contact.lastName + "',";
-		query += " '" + contact.company + "', '" + contact.phone + "')";
+		query += contact.id + ", '" + contact.firstName + "', '" + contact.lastName + "',";
+		query += " '" + contact.company + "', '" + contact.homeNumber + "')";
 		console.log("query:", query);
 		client.execute(query, function(err, result)
 		{
@@ -146,12 +148,12 @@ app.post('/api/createcontact', function(req, res)
 				return;
 			}
 			console.log("insert contact result:", result);
-			res.send(result);
+			res.send({result: true, data: result});
 		});
 	})
 	.catch((error)=>
 	{
-		res.send(error);
+		res.send({result: false, error: error});
 	});
 });
 
@@ -170,12 +172,22 @@ app.get('/api/contacts/all', function(req, res)
 				return;
 			}
 			console.log("get all contacts result:", result);
-			res.send(result.rows);
+			result.rows = _.map(result.rows, (item)=>
+			{
+				return {
+					id: item.user_id,
+					firstName: item.firstname,
+					lastName: item.lastName,
+					company: item.company,
+					homeNumber: item.phone
+				};
+			});
+			res.send({result: true, data: result.rows});
 		});
 	})
 	.catch((error)=>
 	{
-		res.send(error);
+		res.send({result: false, error: error});
 	});
 });
 
