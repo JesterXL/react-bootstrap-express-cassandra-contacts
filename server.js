@@ -177,7 +177,7 @@ app.get('/api/contacts/all', function(req, res)
 				return {
 					id: item.user_id,
 					firstName: item.firstname,
-					lastName: item.lastName,
+					lastName: item.lastname,
 					company: item.company,
 					homeNumber: item.phone
 				};

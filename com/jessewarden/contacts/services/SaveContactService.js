@@ -11,41 +11,38 @@ class SaveContactService
 			// }, 2000);
 
 			// for now uses same, assumes same ID for insert
-			return new Promise(function(success, failure)
+			var apiPort = 2155;
+	        var URL = window.location.protocol + '//' + window.location.hostname + ':' + apiPort;
+			URL += '/api/createcontact';
+			fetch(URL, {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(contact)
+			})
+			.then(function(response)
 			{
-				var apiPort = 2155;
-		        var URL = window.location.protocol + '//' + window.location.hostname + ':' + apiPort;
-				URL += '/api/createcontact';
-				fetch(URL, {
-					method: 'POST',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(contact)
-				})
-				.then(function(response)
+				return response.json();
+			})
+			.then(function(result)
+			{
+				if(result)
 				{
-					return response.json();
-				})
-				.then(function(result)
-				{
-					if(result)
+					if(result.result === true)
 					{
-						if(result.result === true)
-						{
-							success(contact);
-						}
-						else
-						{
-							failure(result.error);
-						}
+						success(contact);
 					}
 					else
 					{
-						failure(new Error("No valid response from server."));
+						failure(result.error);
 					}
-				});
+				}
+				else
+				{
+					failure(new Error("No valid response from server."));
+				}
 			});
 		});
 	}	
