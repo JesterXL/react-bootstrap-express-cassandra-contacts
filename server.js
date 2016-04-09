@@ -50,6 +50,21 @@ app.get('/api/testcassandra', function(req, res)
 	});
 });
 
+app.get('/api/testvmcassandra', function(req, res)
+{
+	const client = new cassandra.Client({contactPoints: [req.query.ip]});
+	client.connect(function(connectError)
+	{
+		if(connectError)
+		{
+			console.log("Cassandra VM connectError:", connectError);
+			return res.send(connectError);
+		}
+		console.log("Connected to Cassandra VM.");
+		rse.send(res.body);
+	});
+});
+
 const KEYSPACE = 'demo';
 
 function connectToCassandra(keyspace)
