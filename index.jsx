@@ -14,6 +14,7 @@ import ContactList from './com/jessewarden/contacts/ContactList';
 import ContactView from './com/jessewarden/contacts/ContactView';
 import EditContactView from './com/jessewarden/contacts/EditContactView';
 import NewContactView from './com/jessewarden/contacts/NewContactView';
+import SearchResults from './com/jessewarden/contacts/SearchResults';
 
 export class App extends React.Component
 {
@@ -57,6 +58,12 @@ export class App extends React.Component
 			});
 		});
 
+		EventBus.pubsub
+		.where(event => event.type === 'search')
+		.subscribe((event)=>
+		{
+			hashHistory.push('/search/' + event.searchValue);
+		});
 	}
 
 	render()
@@ -75,6 +82,7 @@ export class App extends React.Component
 			<div className="container-fluid">
 				<Router history={hashHistory}>
 					<Route path="/" component={MainHeader}></Route>
+					<Route path="/search/:query" component={MainHeader}></Route>
 					<Route path="/view/:id" component={ViewingContactHeader}></Route>
 					<Route path="/edit/:id" component={EditContactHeader}></Route>
 					<Route path="/new" component={NewContactHeader}></Route>
@@ -82,6 +90,7 @@ export class App extends React.Component
 				<section className="row">
 					<Router history={hashHistory}>
 						<Route path="/" component={ContactList}></Route>
+						<Route path="/search/:query" component={SearchResults}></Route>
 						<Route path="/view/:id" component={ContactView}></Route>
 						<Route path="/edit/:id" component={EditContactView}></Route>
 						<Route path="/new" component={NewContactView}></Route>

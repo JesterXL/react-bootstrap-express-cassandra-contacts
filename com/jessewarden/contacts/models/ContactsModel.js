@@ -61,6 +61,25 @@ class ContactsModel
 		}
 	}
 
+	search(query)
+	{
+		console.log("ContactsModel::search, query:", query);
+		var results = [];
+		try
+		{
+			results = _.filter(this._contacts, function(item)
+			{
+				return item.firstName.toLowerCase().indexOf(query) > -1;
+			});
+		}
+		catch(searchError)
+		{
+			results = [];
+		}
+		console.log("will resolve with results:", results);
+		return Promise.resolve(results);
+	}
+
 	getContactByID(id)
 	{
 		console.log("ContactsModel::getContactByID, id:", id);

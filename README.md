@@ -1,33 +1,17 @@
-# react-webpack-babel
-Simple React Webpack Babel Starter Kit
+# What
+Contacts application written in React, Bootstrap, Node.js's Express, and Cassandra.
+
+Uses [Webpack](http://webpack.github.io/) and [Babel](https://babeljs.io/) via a [starter kit](https://github.com/alicoding/react-webpack-babel).
+
+# Code Walkthrough
+
+[![Mou icon](react-code-preview.jpg)](https://www.youtube.com/watch?v=l-gg9_y3AQc)
 
 
-This is a simple [React](https://facebook.github.io/react/), [Webpack](http://webpack.github.io/) and [Babel](https://babeljs.io/) application with nothing else in it.
+# How to Run
 
-### What's in it?
-
-Just a simple [index.jsx](./index.jsx), [webpack.config.js](./webpack.config.js) and [index.html](./public/index.html) file.
-
-### To run
-
-Install webpack and the development server:
-
-```
-> $ npm i webpack-dev-server webpack -g
-```
-
-You can simply run webpack build using this command: 
-
-```
-> $ npm run build
-```
-
-If you want to run with webpack-dev-server simply run this command: 
-
-```
-> $ npm run dev
-```
-
-Open the web browser to `http://localhost:8080/`
-
-Please contribute to the project if you think this can be done better in anyway even for this README :)
+- run a Cassandra instance, ensure IP is in `server.js`
+- `cd` to directory and run `npm install`
+- then run `node server`
+- then in a new terminal window, run `npm run dev`
+- then open your browser to `http://localhost:8080`
